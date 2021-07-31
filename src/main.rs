@@ -35,7 +35,7 @@ struct New {
 fn main() -> eyre::Result<()> {
     let opts = Opts::parse();
     pretty_env_logger::formatted_builder()
-        .filter(Some("boj_cli"), log::LevelFilter::Info)
+        .filter(Some("boj"), log::LevelFilter::Info)
         .init();
 
     match opts.subcmd {
