@@ -157,7 +157,6 @@ dependencies = [
  "indexmap",
  "lazy_static",
  "os_str_bytes",
- "regex",
  "strsim",
  "termcolor",
  "textwrap",
