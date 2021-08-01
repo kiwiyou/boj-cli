@@ -1,10 +1,11 @@
-use std::fs::read_dir;
+use std::fs::{copy, read_dir};
 use std::path::PathBuf;
 use std::process::Command;
 
 use clap::{AppSettings, Clap};
 use eyre::{bail, eyre};
 use log::info;
+use tempfile::tempdir;
 
 use crate::language;
 
@@ -30,20 +31,29 @@ pub fn run(arg: Run) -> eyre::Result<()> {
         for entry in read_dir(&dir)? {
             let entry = entry?;
             if entry.file_name() == filename.as_str() {
+                let temp_dir = tempdir()?;
+                let main_path = temp_dir.path().join("Main").with_extension(lang.ext);
+                copy(entry.path(), &main_path)?;
                 if let Some(ref compile) = lang.compile {
-                    Command::new(&compile.exec)
+                    info!("compiling the solution");
+                    let exit = Command::new(&compile.exec)
                         .args(compile.args)
-                        .current_dir(&dir)
+                        .current_dir(temp_dir.path())
                         .spawn()?
                         .wait()?;
-                    info!("compiled the solution");
+                    if !exit.success() {
+                        bail!("compilation failed");
+                    }
                 }
                 info!("running the solution");
-                Command::new(lang.execute.exec)
+                let exit = Command::new(lang.execute.exec)
                     .args(lang.execute.args)
-                    .current_dir(&dir)
+                    .current_dir(temp_dir.path())
                     .spawn()?
                     .wait()?;
+                if !exit.success() {
+                    bail!("NZEC");
+                }
                 break;
             }
         }

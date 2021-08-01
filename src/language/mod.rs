@@ -1,3 +1,5 @@
+mod kotlin;
+mod python;
 mod rust;
 
 pub struct Language {
@@ -14,7 +16,14 @@ pub struct Command {
     pub args: &'static [&'static str],
 }
 
-pub const LANGUAGES: &[Language] = &[rust::RUST_2015, rust::RUST_2018];
+pub const LANGUAGES: &[Language] = &[
+    rust::RUST_2015,
+    rust::RUST_2018,
+    python::PYTHON2,
+    python::PYTHON3,
+    kotlin::KOTLIN_JVM,
+    kotlin::KOTLIN_NATIVE,
+];
 
 pub fn find_by_short(short: &str) -> Option<&'static Language> {
     LANGUAGES.iter().find(|l| l.short == short)
