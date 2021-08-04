@@ -2,7 +2,6 @@ use super::{Command, Language};
 
 pub const RUST_2015: Language = Language {
     name: "Rust 2015",
-    short: "rs15",
     ext: "rs",
     compile: Some(Command {
         exec: "rustc",
@@ -23,7 +22,6 @@ pub const RUST_2015: Language = Language {
 };
 pub const RUST_2018: Language = Language {
     name: "Rust 2018",
-    short: "rs18",
     ext: "rs",
     compile: Some(Command {
         exec: "rustc",

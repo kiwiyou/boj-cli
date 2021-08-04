@@ -2,7 +2,6 @@ use super::{Command, Language};
 
 pub const KOTLIN_JVM: Language = Language {
     name: "Kotlin (JVM)",
-    short: "ktj",
     ext: "kt",
     compile: Some(Command {
         exec: "kotlinc-jvm",
@@ -34,7 +33,6 @@ pub const KOTLIN_JVM: Language = Language {
 };
 pub const KOTLIN_NATIVE: Language = Language {
     name: "Kotlin (Native)",
-    short: "ktn",
     ext: "kt",
     compile: Some(Command {
         exec: "kotlinc-native",

@@ -4,10 +4,10 @@ use std::path::Path;
 use clap::{AppSettings, Clap};
 use eyre::{bail, eyre};
 use log::info;
+use muroba::query::{Query, QueryBuilder};
 use tera::Tera;
 
-use crate::command::{save_meta, Metadata};
-use crate::language;
+use crate::language::LANGUAGES;
 use crate::vendor::Client;
 
 #[derive(Clap)]
@@ -15,25 +15,33 @@ use crate::vendor::Client;
 pub struct New {
     /// Problem ID
     id: u32,
-    /// Language to use
-    lang: String,
-    /// Problem Title in kebab-case
-    #[clap(short, long)]
-    title: Option<String>,
 }
 
 pub fn new(arg: New) -> eyre::Result<()> {
     let client = Client::new();
-    let lang = language::find_by_short(&arg.lang)
-        .ok_or_else(|| eyre!("language `{}` doesn't exist", &arg.lang))?;
     let problem = client
         .find_problem_by_id(arg.id)?
         .ok_or_else(|| eyre!("problem with id {} doesn't exist", arg.id))?;
-    let dir_name = if let Some(title) = arg.title {
+    
+    let language_list: Vec<_> = LANGUAGES.iter().map(|l| l.name).collect();
+    let select = QueryBuilder::default()
+        .with_prompt("Choose the langauge")
+        .select(&language_list)
+        .fix_rows(5)
+        .show()?;
+    let lang = &LANGUAGES[select[0].0];
+
+    let title = QueryBuilder::default()
+        .with_prompt("Optional title")
+        .input()
+        .show()?;
+
+    let dir_name = if !title.is_empty() {
         format!("{}-{}", arg.id, title)
     } else {
         arg.id.to_string()
     };
+
     let path = Path::new(&dir_name);
     if path.exists() {
         bail!(
@@ -45,15 +53,6 @@ pub fn new(arg: New) -> eyre::Result<()> {
     }
     DirBuilder::new().create(path)?;
     info!("created problem directory");
-
-    save_meta(
-        path,
-        &Metadata {
-            language: lang.short.to_string(),
-            created_at: chrono::Local::today().naive_local(),
-            solved: false,
-        },
-    )?;
 
     let tera = Tera::new("template/**/*")?;
     let mut context = tera::Context::new();

@@ -13,6 +13,7 @@ chrono = { version = "0.4.19", features = ["serde"] }
 clap = "3.0.0-beta.2"
 eyre = "0.6.5"
 log = "0.4.14"
+muroba = { git = "https://github.com/kiwiyou/muroba" }
 pretty_env_logger = "0.4.0"
 serde = { version = "1.0.126", features = ["derive"] }
 serde_json = "1.0.66"
