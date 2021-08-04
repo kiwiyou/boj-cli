@@ -21,11 +21,10 @@ cargo install --path .
 ---
 
 - `boj new <id>`
-  - `<id>`번 문제를 위한 디렉토리를 `./<id>` 위치에 생성합니다.
+  - `<id>`번 문제를 위한 디렉토리를 생성합니다.
 
-- `boj new <id> --title <title>`:
-  - `<id>`번 문제를 위한 디렉토리를 `./<id>-<title>` 위치에 생성합니다.
-  - `<title>`은 영문 kebab-case가 권장됩니다.
+- `boj run <id>`
+  - `<id>`번 문제 코드를 실행합니다.
 
 디렉토리 구조
 ---
@@ -43,11 +42,8 @@ cargo install --path .
 - `./<id>[-<title>]`
   - `<id>`번 문제를 위한 디렉토리입니다.
 
-- `./<id>[-<title>]/meta.json`
-  - 문제 풀이 정보를 담은 파일입니다.
-
 - `./<id>[-<title>]/note.json`
   - 문제 풀이 노트입니다.
 
-- `./<id>[-<title>]/note.json`
+- `./<id>[-<title>]/solution.*`
   - 문제 풀이 코드입니다.
