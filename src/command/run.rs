@@ -33,7 +33,7 @@ pub fn run(arg: Run) -> eyre::Result<()> {
     }
     info!("running the solution");
     let exit = Command::new("bash")
-        .args(&["c", lang.execute])
+        .args(&["-c", lang.execute])
         .current_dir(temp_dir.path())
         .spawn()?
         .wait()?;
