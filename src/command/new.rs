@@ -22,7 +22,7 @@ pub fn new(arg: New) -> eyre::Result<()> {
     let problem = client
         .find_problem_by_id(arg.id)?
         .ok_or_else(|| eyre!("problem with id {} doesn't exist", arg.id))?;
-    
+
     let language_list: Vec<_> = LANGUAGES.iter().map(|l| l.name).collect();
     let select = QueryBuilder::default()
         .with_prompt("Choose the langauge")

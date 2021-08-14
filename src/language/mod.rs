@@ -1,5 +1,6 @@
 use std::ffi::OsStr;
 
+mod asm;
 mod kotlin;
 mod python;
 mod rust;
@@ -7,14 +8,9 @@ mod rust;
 pub struct Language {
     pub name: &'static str,
     pub ext: &'static str,
-    pub compile: Option<Command>,
-    pub execute: Command,
+    pub compile: Option<&'static str>,
+    pub execute: &'static str,
     pub version: &'static str,
-}
-
-pub struct Command {
-    pub exec: &'static str,
-    pub args: &'static [&'static str],
 }
 
 pub const LANGUAGES: &[Language] = &[
@@ -24,6 +20,8 @@ pub const LANGUAGES: &[Language] = &[
     python::PYTHON3,
     kotlin::KOTLIN_JVM,
     kotlin::KOTLIN_NATIVE,
+    asm::ASSEMBLY_X32,
+    asm::ASSEMBLY_X64,
 ];
 
 pub fn find_by_ext(ext: &OsStr) -> impl Iterator<Item = &'static Language> + '_ {
